@@ -18,6 +18,7 @@ parser.add_argument("--driver-path", required=True, help="Path to Edge WebDriver
 parser.add_argument("--desktop", type=int, default=0, help="Number of desktop searches")
 parser.add_argument("--mobile", type=int, default=0, help="Number of mobile searches")
 parser.add_argument("--log-dir", default="logs", help="Directory to store log files")
+parser.add_argument("--headless", action="store_true", help="Run the browser in headless mode (no UI).")
 args = parser.parse_args()
 
 # Create logs directory if it doesn't exist
@@ -88,6 +89,10 @@ def perform_searches(driver, num_searches, search_type):
 # Desktop searches
 logger.info("Initializing Edge WebDriver for desktop searches")
 desktop_options = webdriver.EdgeOptions()
+if args.headless:
+    logger.info("Running in headless mode.")
+    desktop_options.add_argument("--headless")
+    desktop_options.add_argument("--disable-gpu")
 edge_service = Service(executable_path=args.driver_path)
 driver = webdriver.Edge(service=edge_service, options=desktop_options)
 driver.get("https://www.bing.com")
@@ -117,6 +122,10 @@ if args.mobile > 0:
     logger.info("Initializing Edge WebDriver for mobile searches")
     mobile_options = webdriver.EdgeOptions()
     mobile_options.add_argument("--user-agent=Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Mobile Safari/537.36")
+    if args.headless:
+        logger.info("Running in headless mode.")
+        mobile_options.add_argument("--headless")
+        mobile_options.add_argument("--disable-gpu")
     edge_service = Service(executable_path=args.driver_path)
     driver = webdriver.Edge(service=edge_service, options=mobile_options)
     driver.get("https://www.bing.com")

@@ -1,0 +1,4 @@
+driver_path=C:/Users/senit/Downloads/Compressed/msedgedriver.exe
+desktop_count=30
+mobile_count=20
+headless=True
